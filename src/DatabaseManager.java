@@ -64,10 +64,10 @@ public class DatabaseManager {
                     while(resultSet.next()){
                         String fileName = resultSet.getString("fileName");
                         String filePath = resultSet.getString("path");
-                        //String filePath = resultSet.getString("path");
+                        //String fileType = resultSet.getString("type");
 
                         //System.out.println("File name: "+fileName);
-                        files.add(new FileInfo(fileName, filePath));
+                        files.add(new FileInfo(fileName, filePath,type));
                     }
                 }
                 
