@@ -41,14 +41,24 @@ public class App extends Application {
     private void showFileList(String type) {
         BorderPane fileListLayout = new BorderPane();
         ListView<String> fileListView = new ListView<>();
+
+         
+
         
         // Add placeholder files based on type
         if (type.equals("PDF")) {
+            List<String> files= DatabaseManager.retrieve(type);
             fileListView.getItems().addAll("SamplePDF1.pdf", "SamplePDF2.pdf");
+            fileListView.getItems().addAll(files);
+
         } else if (type.equals("Video")) {
+            List<String> files= DatabaseManager.retrieve(type);
             fileListView.getItems().addAll("SampleVideo1.mp4", "SampleVideo2.mp4");
+            fileListView.getItems().addAll(files);
         } else if (type.equals("Music")) {
+            List<String> files= DatabaseManager.retrieve(type);
             fileListView.getItems().addAll("SampleMusic1.mp3", "SampleMusic2.mp3");
+            fileListView.getItems().addAll(files);
         }
 
         // Create the "Upload" button to add files

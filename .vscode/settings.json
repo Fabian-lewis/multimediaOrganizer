@@ -10,6 +10,9 @@
         "c:\\Program Files\\Java\\javafx-sdk-21.0.2\\lib\\javafx.media.jar",
         "c:\\Program Files\\Java\\javafx-sdk-21.0.2\\lib\\javafx.swing.jar",
         "c:\\Program Files\\Java\\javafx-sdk-21.0.2\\lib\\javafx.web.jar",
-        "c:\\Program Files\\Java\\javafx-sdk-21.0.2\\lib\\javafx-swt.jar"
+        "c:\\Program Files\\Java\\javafx-sdk-21.0.2\\lib\\javafx-swt.jar",
+        "c:\\SQL Lite\\New folder (2)\\slf4j-api-2.0.13.jar",
+        "c:\\SQL Lite\\New folder\\sqlite-jdbc-3.45.1.0.jar",
+        "c:\\SQL Lite\\New folder (2)\\slf4j-simple-2.0.13.jar"
     ]
 }

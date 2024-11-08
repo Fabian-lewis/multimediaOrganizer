@@ -1,8 +1,14 @@
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.sqlite.core.DB;
+
 import java.sql.Connection;
-import java.sql.Driver;
+//import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseManager {
@@ -28,7 +34,7 @@ public class DatabaseManager {
     }
 
     public static void insertFile(String name, String type, String path){
-        String insertfileString = "INSERT INTO files(name,type,path) VALUES (?,?,?)";
+        String insertfileString = "INSERT INTO files(fileName,type,path) VALUES (?,?,?)";
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
             PreparedStatement pstmt = conn.prepareStatement(insertfileString)){
@@ -42,6 +48,31 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public static List<String> retrieve(String type){
+        String retrieveSQL = "SELECT fileName, path from files where type = ?";
+        List<String> files = new ArrayList<>();
+
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+            PreparedStatement pstmt = conn.prepareStatement(retrieveSQL)){
+
+                pstmt.setString(1, type);
+                try(ResultSet resultSet = pstmt.executeQuery()){
+
+                    while(resultSet.next()){
+                        String fileName = resultSet.getString("fileName");
+                        //String filePath = resultSet.getString("path");
+
+                        System.out.println("File name: "+fileName);
+                        files.add(fileName);
+                    }
+                }
+                
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+                return files;
     }
 
 }
