@@ -7,6 +7,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+
 import java.io.File;
 import java.util.List;
 
@@ -45,9 +49,6 @@ public class App extends Application {
     private void showFileList(String type) {
         BorderPane fileListLayout = new BorderPane();
         ListView<FileInfo> fileListView = new ListView<>();
-
-         
-
         
         // Add placeholder files based on type
         if (type.equals("PDF")) {
@@ -64,6 +65,16 @@ public class App extends Application {
             //fileListView.getItems().addAll("SampleMusic1.mp3", "SampleMusic2.mp3");
             fileListView.getItems().addAll(files);
         }
+        //Create a listener to respond to item selections
+        fileListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
+            if(newValue!=null){
+                String selectedFileName = newValue.getName();
+                String selectedFilePath = newValue.getPath();
+
+                System.out.println("Selected File: "+selectedFileName+" Selected Path: "+selectedFilePath);
+                openFile(selectedFilePath);
+            }
+        });
 
         // Create the "Upload" button to add files
         Button uploadButton = new Button("Upload " + type);
@@ -113,6 +124,21 @@ public class App extends Application {
             }
         }
     }
+
+
+    private void openFile(String filePath) {
+        try {
+            File file = new File(filePath);
+            if (file.exists()) {
+                Desktop.getDesktop().open(file);
+            } else {
+                System.out.println("File not found: " + filePath);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+    }
+}
+
 
     public static void main(String[] args) {
         launch(args);
