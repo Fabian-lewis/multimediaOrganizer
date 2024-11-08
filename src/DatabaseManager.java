@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.sqlite.core.DB;
 
+import java.io.File;
+import java.io.ObjectInputFilter.FilterInfo;
 import java.sql.Connection;
 //import java.sql.Driver;
 import java.sql.DriverManager;
@@ -49,9 +51,9 @@ public class DatabaseManager {
             e.printStackTrace();
         }
     }
-    public static List<String> retrieve(String type){
+    public static List<FileInfo> retrieve(String type){
         String retrieveSQL = "SELECT fileName, path from files where type = ?";
-        List<String> files = new ArrayList<>();
+        List<FileInfo> files = new ArrayList<>();
 
         try (Connection conn = DriverManager.getConnection(DB_URL);
             PreparedStatement pstmt = conn.prepareStatement(retrieveSQL)){
@@ -61,10 +63,11 @@ public class DatabaseManager {
 
                     while(resultSet.next()){
                         String fileName = resultSet.getString("fileName");
+                        String filePath = resultSet.getString("path");
                         //String filePath = resultSet.getString("path");
 
-                        System.out.println("File name: "+fileName);
-                        files.add(fileName);
+                        //System.out.println("File name: "+fileName);
+                        files.add(new FileInfo(fileName, filePath));
                     }
                 }
                 

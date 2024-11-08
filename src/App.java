@@ -10,8 +10,12 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.util.List;
 
-public class App extends Application {
 
+
+
+
+public class App extends Application {
+   
     private Stage primaryStage;
     private Scene dashboardScene;
 
@@ -40,24 +44,24 @@ public class App extends Application {
 
     private void showFileList(String type) {
         BorderPane fileListLayout = new BorderPane();
-        ListView<String> fileListView = new ListView<>();
+        ListView<FileInfo> fileListView = new ListView<>();
 
          
 
         
         // Add placeholder files based on type
         if (type.equals("PDF")) {
-            List<String> files= DatabaseManager.retrieve(type);
-            fileListView.getItems().addAll("SamplePDF1.pdf", "SamplePDF2.pdf");
+            List<FileInfo> files= DatabaseManager.retrieve(type);
+            //fileListView.getItems().addAll("SamplePDF1.pdf", "SamplePDF2.pdf");
             fileListView.getItems().addAll(files);
 
         } else if (type.equals("Video")) {
-            List<String> files= DatabaseManager.retrieve(type);
-            fileListView.getItems().addAll("SampleVideo1.mp4", "SampleVideo2.mp4");
+            List<FileInfo> files= DatabaseManager.retrieve(type);
+            //fileListView.getItems().addAll("SampleVideo1.mp4", "SampleVideo2.mp4");
             fileListView.getItems().addAll(files);
         } else if (type.equals("Music")) {
-            List<String> files= DatabaseManager.retrieve(type);
-            fileListView.getItems().addAll("SampleMusic1.mp3", "SampleMusic2.mp3");
+            List<FileInfo> files= DatabaseManager.retrieve(type);
+            //fileListView.getItems().addAll("SampleMusic1.mp3", "SampleMusic2.mp3");
             fileListView.getItems().addAll(files);
         }
 
@@ -79,7 +83,7 @@ public class App extends Application {
     }
 
     // Method to upload files and add them to the list
-    private void uploadFiles(String type, ListView<String> fileListView) {
+    private void uploadFiles(String type, ListView<FileInfo> fileListView) {
         FileChooser fileChooser = new FileChooser();
 
         // Set file extension filters based on type
@@ -99,8 +103,10 @@ public class App extends Application {
                 String fileName = file.getName();
                 String filePath = file.getAbsolutePath();
 
+                FileInfo fileInfo = new FileInfo(fileName, filePath);
 
-                fileListView.getItems().add(fileName); // Add the file name to the list view
+
+                fileListView.getItems().add(fileInfo); // Add the file name to the list view
                 // Here you can also store file path to the database for later access
 
                 DatabaseManager.insertFile(fileName, type, filePath);
@@ -111,5 +117,7 @@ public class App extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
 }
 
