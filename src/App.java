@@ -2,11 +2,16 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -58,7 +63,7 @@ public class App extends Application {
         VBox dashboardLayout = new VBox(15);
         dashboardLayout.getChildren().addAll(pdfButton, wordButton,excelButton,powerPointButton,videoButton, musicButton);
 
-        dashboardScene = new Scene(dashboardLayout, 300, 200);
+        dashboardScene = new Scene(dashboardLayout, 800, 600);
         dashboardScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         primaryStage.setTitle("Multimedia Document Organizer");
         primaryStage.setScene(dashboardScene);
@@ -104,15 +109,18 @@ public class App extends Application {
             //fileListView.getItems().addAll(files);
         }
         //Create a listener to respond to item selections
-        fileListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue)->{
-            if(newValue!=null){
-                String selectedFileName = newValue.getName();
-                String selectedFilePath = newValue.getPath();
-
-                System.out.println("Selected File: "+selectedFileName+" Selected Path: "+selectedFilePath);
-                openFile(newValue);
-            }
-        });
+        fileListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+    if (newValue != null) {
+        Alert infoDialog = new Alert(Alert.AlertType.INFORMATION);
+        infoDialog.setTitle("File Selected");
+        infoDialog.setHeaderText("File Information");
+        infoDialog.setContentText("Name: " + newValue.getName() + "\nPath: " + newValue.getPath());
+        infoDialog.showAndWait();
+        openFile(newValue);
+    }
+});
+;
+       
 
         // Create the "Upload" button to add files
         Button uploadButton = new Button("Upload " + type);
@@ -132,7 +140,7 @@ public class App extends Application {
         fileListLayout.setCenter(fileListView);
         fileListLayout.setBottom(buttonBox);
 
-        Scene fileListScene = new Scene(fileListLayout, 400, 300);
+        Scene fileListScene = new Scene(fileListLayout, 800, 600);
         fileListScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         primaryStage.setScene(fileListScene);
     }
@@ -206,27 +214,112 @@ public class App extends Application {
             e.printStackTrace();
         }
     }
-    public void openMedia(String filePath, String fileType){
-        System.out.println("Opening Media.....");
-        Stage mediaStage = new Stage();
-        mediaStage.setTitle("MediaPlayer");
+    public void openMedia(String filePath, String fileType) {
+    System.out.println("Opening Media.....");
+    Stage mediaStage = new Stage();
+    mediaStage.setTitle("MediaPlayer");
 
-        Media media = new Media(new File(filePath).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(media);
-        MediaView mediaView = new MediaView(mediaPlayer);
+    // Create the media object and player
+    Media media = new Media(new File(filePath).toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(media);
 
-        if(fileType.equals("Music")){
-            mediaView.setFitWidth(0);
-            mediaView.setFitHeight(0);
-        }
-        StackPane mediaLayout = new StackPane(mediaView);
-        Scene mediaScene = new Scene(mediaLayout, 800,600);
+    // Create the MediaView for video files
+    MediaView mediaView = new MediaView(mediaPlayer);
 
-        mediaStage.setScene(mediaScene);
-        mediaStage.show();
+    // StackPane layout for video and music
+    StackPane mediaLayout = new StackPane(mediaView);
 
-        mediaPlayer.setAutoPlay(true);
+    // Get the file name from the path
+    String fileName = new File(filePath).getName();
+
+    // Label to display the file name
+    Label fileNameLabel = new Label(fileName);
+    fileNameLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;");
+    fileNameLabel.setAlignment(Pos.CENTER);
+    fileNameLabel.setMaxWidth(Double.MAX_VALUE);
+
+    if (fileType.equals("Music")) {
+        // Hide the video view for music files
+        mediaView.setFitWidth(0);
+        mediaView.setFitHeight(0);
+
+        // Music playback controls (play, pause, stop, volume)
+        Button playButton = new Button("Play");
+        Button pauseButton = new Button("Pause");
+        Button stopButton = new Button("Stop");
+        Slider volumeSlider = new Slider(0, 1, 0.5); // Volume slider
+
+        // Play button action
+        playButton.setOnAction(event -> mediaPlayer.play());
+
+        // Pause button action
+        pauseButton.setOnAction(event -> mediaPlayer.pause());
+
+        // Stop button action
+        stopButton.setOnAction(event -> mediaPlayer.stop());
+
+        // Volume slider action
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> 
+            mediaPlayer.setVolume(newValue.doubleValue()));
+
+        // Layout for music controls
+        HBox musicControls = new HBox(10, playButton, pauseButton, stopButton, volumeSlider);
+        musicControls.setAlignment(Pos.CENTER);
+        musicControls.setSpacing(10);
+
+        // Layout for music
+        VBox musicLayout = new VBox(10, fileNameLabel, musicControls);
+        musicLayout.setAlignment(Pos.CENTER);
+        musicLayout.setSpacing(10);
+
+        // Add the music layout
+        mediaLayout.getChildren().add(musicLayout);
+    } else if (fileType.equals("Video")) {
+        // Video playback controls (play, pause, stop, volume)
+        Button playButton = new Button("Play");
+        Button pauseButton = new Button("Pause");
+        Button stopButton = new Button("Stop");
+        Slider volumeSlider = new Slider(0, 1, 0.5); // Volume slider
+
+        // Play button action
+        playButton.setOnAction(event -> mediaPlayer.play());
+
+        // Pause button action
+        pauseButton.setOnAction(event -> mediaPlayer.pause());
+
+        // Stop button action
+        stopButton.setOnAction(event -> mediaPlayer.stop());
+
+        // Volume slider action
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> 
+            mediaPlayer.setVolume(newValue.doubleValue()));
+
+        // Layout for video controls
+        HBox videoControls = new HBox(10, playButton, pauseButton, stopButton, volumeSlider);
+        videoControls.setAlignment(Pos.CENTER);
+        videoControls.setSpacing(10);
+
+        // Layout for video
+        VBox videoLayout = new VBox(10, fileNameLabel, videoControls);
+        videoLayout.setAlignment(Pos.CENTER);
+        videoLayout.setSpacing(10);
+
+        // Add the video layout
+        mediaLayout.getChildren().add(videoLayout);
     }
+
+    // Create the scene with the media layout
+    Scene mediaScene = new Scene(mediaLayout, 800, 600);
+    mediaScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
+    mediaStage.setScene(mediaScene);
+    mediaStage.show();
+
+    // Auto play the media
+    mediaPlayer.setAutoPlay(true);
+}
+
+
 
 
     public static void main(String[] args) {

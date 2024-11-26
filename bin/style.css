@@ -13,3 +13,14 @@
     -fx-background-color: linear-gradient(#42A5F5, #2196F3);
     -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
 }
+.list-view .list-cell {
+    -fx-padding: 10px;
+    -fx-font-size: 14px;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.list-view .list-cell:hover {
+    -fx-background-color: #f1f8e9;
+}
+
