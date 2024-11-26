@@ -1,0 +1,15 @@
+.button {
+    -fx-background-color: linear-gradient(#2196F3, #1769AA);
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-pref-width: 150px;
+    -fx-pref-height: 100px;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#42A5F5, #2196F3);
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.3), 10, 0, 0, 0);
+}

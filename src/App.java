@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
@@ -32,6 +33,8 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        
+
         this.primaryStage = primaryStage;
         DatabaseManager.createDatabase();
 
@@ -40,6 +43,7 @@ public class App extends Application {
         Button wordButton = new Button("Word Document");
         Button excelButton = new Button("Excel Document");
         Button powerPointButton = new Button("PowerPoint Documents");
+        powerPointButton.setWrapText(true);
         Button videoButton = new Button("Video Files");
         Button musicButton = new Button("Music Files");
 
@@ -55,6 +59,7 @@ public class App extends Application {
         dashboardLayout.getChildren().addAll(pdfButton, wordButton,excelButton,powerPointButton,videoButton, musicButton);
 
         dashboardScene = new Scene(dashboardLayout, 300, 200);
+        dashboardScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         primaryStage.setTitle("Multimedia Document Organizer");
         primaryStage.setScene(dashboardScene);
         primaryStage.show();
@@ -115,14 +120,20 @@ public class App extends Application {
 
         // Back button to return to dashboard
         Button backButton = new Button("Back to Dashboard");
+        backButton.setWrapText(true);
         backButton.setOnAction(event -> primaryStage.setScene(dashboardScene));
 
         // Layout with list and buttons
-        VBox buttonBox = new VBox(10, uploadButton, backButton);
+        GridPane buttonBox = new GridPane();
+        buttonBox.setHgap(10);
+        GridPane.setConstraints(uploadButton, 0, 0);
+        GridPane.setConstraints(backButton, 1, 0);
+        buttonBox.getChildren().addAll(uploadButton,backButton);
         fileListLayout.setCenter(fileListView);
         fileListLayout.setBottom(buttonBox);
 
         Scene fileListScene = new Scene(fileListLayout, 400, 300);
+        fileListScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         primaryStage.setScene(fileListScene);
     }
 
